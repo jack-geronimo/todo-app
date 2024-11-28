@@ -7,7 +7,7 @@ const App: React.FC = () => {
         <div className="App">
             <TaskList />
             <div style={{backgroundColor: "white"}} >
-            <HexCombiner />
+                <HexCombiner />
             </div>
         </div>
     );
