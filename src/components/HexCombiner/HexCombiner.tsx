@@ -1,49 +1,81 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 
 const HexCombiner: React.FC = () => {
     const [input, setInput] = useState('');
-    const [output, setOutput] = useState('0x');
+    const [output, setOutput] = useState('');
+    const [error, setError] = useState(false);
 
-    const combineHexValues = (input: string): string => {
-        const cleanedInput = input.replace(/\s|,/g, '');
-        const matches = cleanedInput.match(/0x[0-9a-fA-F]+/g);
+    function combineHexValues(input: string): string {
 
-        if (!matches) {
-            return '0x';
+        if (input.trim() === '') {
+            setError(false);
+            return '';
         }
 
-        const combinedHex = matches.map(hex => hex.slice(2)).join('');
-        return `0x${combinedHex}`;
+        // Match valid two-digit hex values with optional "0x" prefix
+        const hexPattern = /(?:0x)?([0-9A-Fa-f]{2})/g;
+        let match;
+        const hexValues = [];
+
+        // Extract all valid hex values
+        while ((match = hexPattern.exec(input)) !== null) {
+            hexValues.push(match[1]);
+        }
+
+        // Remove all valid hex values and allowed separators
+        const leftover = input
+            .replace(hexPattern, '')
+            .replace(/[,;\s]+/g, '').trim();
+
+        if (hexValues.length === 0 || leftover.length > 0) {
+            setError(true);
+            return '';
+        }
+
+        setError(false);
+        return `0x${hexValues.join('')}`;
+    }
+
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.value;
+        setInput(value);
+        const result = combineHexValues(value);
+        setOutput(result);
     };
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-        setInput(value);
-        setOutput(combineHexValues(value));
+
+    const handleSubmit = () => {
+        if (isValidHexEntry()) {
+            alert(`Valid Hex Sequence Sent: ${output}`);
+        }
     };
+
+    const isValidHexEntry = (): boolean => !error && output.trim() !== '';
 
     return (
-        <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
-            <label htmlFor="hexInput" style={{ display: 'block', marginBottom: '8px' }}>
-                Hex-Eingabe:
-            </label>
-            <input
-                id="hexInput"
-                type="text"
-                value={input}
-                onChange={handleInputChange}
-                placeholder="z.B. 0x12, 0x130x14, ..."
-                style={{
-                    padding: '8px',
-                    width: '300px',
-                    border: '1px solid #ccc',
-                    borderRadius: '4px',
-                    marginBottom: '16px',
-                }}
+        <div style={{fontFamily: 'Arial', padding: '20px'}}>
+            <h2>Hexadecimal Combiner</h2>
+            <input id={'hexInput'}
+                   type="text"
+                   value={input}
+                   onChange={handleInputChange}
+                   placeholder="Enter hex values (e.g., 0x12,0x13;14 or 121314)"
+                   style={{
+                       border: error ? '2px solid red' : '2px solid black',
+                       padding: '5px',
+                       width: '600px',
+                   }}
             />
-            <p>
-                Ergebnis: <span style={{ fontWeight: 'bold' }}>{output}</span>
-            </p>
+            {error &&
+                <p id={'errorContainer'} style={{color: 'red'}}>Invalid input. Ensure all hex values are two digits and separated correctly.</p>}
+            <p id={'resultContainer'}>Output: {output}</p>
+            <button onClick={handleSubmit} disabled={!isValidHexEntry()}>
+                Send
+            </button>
+
+            {/*            <Button active onClick={() => handleSubmit()} className="w-full mt-2">
+                Add new Task
+            </Button>*/}
         </div>
     );
 };
