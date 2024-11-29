@@ -46,6 +46,12 @@ const HexCombiner: React.FC = () => {
         }
     };
 
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter') {
+            handleSubmit();
+        }
+    };
+
     const isValidHexEntry = (): boolean => !error && output.trim() !== '';
 
     return (
@@ -69,6 +75,7 @@ const HexCombiner: React.FC = () => {
                        type="text"
                        value={input}
                        onChange={handleInputChange}
+                       onKeyDown={handleKeyDown}
                        placeholder="Enter hex values (e.g., 0x12,0x13;14 or 121314)"
                        style={{
                            border: error ? '2px solid red' : '2px solid black',
