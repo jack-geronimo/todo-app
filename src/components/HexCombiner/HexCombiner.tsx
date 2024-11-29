@@ -16,7 +16,6 @@ const HexCombiner: React.FC = () => {
         let match;
         const hexValues = [];
 
-        // Extract all valid hex values
         while ((match = hexPattern.exec(input)) !== null) {
             hexValues.push(match[1]);
         }
