@@ -5,10 +5,10 @@ import TaskList from './components/TaskList';
 const App: React.FC = () => {
     return (
         <div className="App">
-            <TaskList />
-            <div style={{backgroundColor: "white"}} >
-                <HexCombiner />
+            <div style={{backgroundColor: "white"}}>
+                <HexCombiner/>
             </div>
+            <TaskList/>
         </div>
     );
 };
