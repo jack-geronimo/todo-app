@@ -1,5 +1,5 @@
 {
-  "homepage": "https://zahra77fth.github.io/react-todo-app",
+  "homepage": "https://jack-geronimo.github.io/todo-app",
   "name": "react-todo-app",
   "version": "0.1.0",
   "private": true,
@@ -20,7 +20,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
+    "deploy": "gh-pages -d build -r https://jack-geronimo:$GH_TOKEN@github.com/jack-geronimo/todo-app.git",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "cypress:open": "cypress open",
